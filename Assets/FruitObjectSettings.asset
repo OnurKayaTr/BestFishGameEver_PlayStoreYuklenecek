@@ -12,24 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c06648fdf8401448a56a7d149fc0cdb, type: 3}
   m_Name: FruitObjectSettings
   m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: eabcf673685c9a7418c85d7e737d382d, type: 3}
-  - {fileID: 21300000, guid: 6322c5c7ca7ddb2418a02267787a0591, type: 3}
-  - {fileID: 21300000, guid: 5386dea6419d50447ac5ff382f056228, type: 3}
-  - {fileID: 21300000, guid: b43cdae37b6d82e4cb07ea313f700749, type: 3}
-  - {fileID: 21300000, guid: b2c2d7b69e56c6f46918f113aae6a47f, type: 3}
-  - {fileID: 21300000, guid: 7484161fdcb8c434ba0b6fac1d73dc03, type: 3}
-  - {fileID: 21300000, guid: cdc710ed017051a4691cc04855411ab0, type: 3}
-  - {fileID: 21300000, guid: 518882b281ef3364c8be1a315e2dae42, type: 3}
-  - {fileID: 21300000, guid: 866d87a5101f7184282607f2d32fd35d, type: 3}
-  scales:
-  - 0.25
-  - 0.5
-  - 0.75
-  - 1
-  - 1.25
-  - 1.5
-  - 1.75
-  - 2
-  - 2.25
-  prefab: {fileID: 67210251870313709, guid: 576d9a9acbb8f2a408c74d3410eb2a93, type: 3}
+  fruitPrefabs:
+  - {fileID: 4923356458514977673, guid: 0c25a7a795fde9d44806bf3b9820c5c2, type: 3}
+  - {fileID: 5956826867331371510, guid: 5626016bc564f5d4695ec6e312a1e985, type: 3}
+  - {fileID: 4209910769573416008, guid: ab3760c028733094bb04cf15e23f8308, type: 3}
+  - {fileID: 6349814645271322934, guid: 58dc44cdf1196244aae26f63b4e72928, type: 3}
+  - {fileID: 6084371904660433690, guid: d2c09a5127f17654ab97b46f44142a71, type: 3}
+  - {fileID: 4936667909918700034, guid: 59e36d3c52a791d48b692b774608315d, type: 3}
+  - {fileID: 8185332470977263369, guid: 8044a86906297fe49803f7b8652f7cea, type: 3}
+  - {fileID: 4282160160429254131, guid: b19f9b9238e304f4096526b931156716, type: 3}
+  - {fileID: 5991852037212140121, guid: 3a0d6287c35b8fe44b43e53d48517988, type: 3}
+  - {fileID: 7486254116565077223, guid: 82d19968cb1fc17438bc963ce0e98a4a, type: 3}

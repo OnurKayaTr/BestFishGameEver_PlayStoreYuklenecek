@@ -1,21 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FruitObject : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-    public int type { get; private set; }
-    public bool SendedMergeSignal { get; private set; }
-    public float moveSpeed = 2f; // Meyvelerin hareket hýzý
-    [SerializeField] private LayerMask barrierLayerMask; // Bariyerleri tanýmlamak için bir LayerMask
-
-    public void Prepare(Sprite sprite, int index, float scale)
-    {
-        spriteRenderer.sprite = sprite;
-        type = index;
-        transform.localScale = Vector3.one * scale;
-    }
+    public int type { get; set; } // 'get; set;' kullanarak eriþimi açýyoruz
+    public bool SendedMergeSignal { get; set; } // 'get; set;' kullanarak eriþimi açýyoruz
+    public float moveSpeed = 2f;
+    [SerializeField] private LayerMask barrierLayerMask;
 
     private void Update()
     {
@@ -24,7 +15,6 @@ public class FruitObject : MonoBehaviour
 
     private void MoveTowardsNearestFruit()
     {
-        // Sadece meyvelerin bariyerlere çarpmadan birbirine gitmesi
         if (!IsCollidingWithBarrier())
         {
             FruitObject nearestFruit = FindNearestSameTypeFruit();
@@ -38,7 +28,6 @@ public class FruitObject : MonoBehaviour
 
     private bool IsCollidingWithBarrier()
     {
-        // Bariyerle çarpýþmayý kontrol et
         Collider2D barrierCollision = Physics2D.OverlapCircle(transform.position, 0.1f, barrierLayerMask);
         return barrierCollision != null;
     }
@@ -67,35 +56,22 @@ public class FruitObject : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        // Bariyer objesiyle çarpýþýyorsa iþlem yapma
-        if (other.gameObject.layer == LayerMask.NameToLayer("Barrier")) return;
+        if (SendedMergeSignal) return;
 
         var fruitObj = other.transform.GetComponent<FruitObject>();
-
-        if (!fruitObj) { return; }
-        if (fruitObj.type != type) { return; }
-        if (fruitObj.SendedMergeSignal) { return; }
-        SendedMergeSignal = true;
-        GameManager.Instance.Merge(this, fruitObj);
+        if (fruitObj && fruitObj.type == type && !fruitObj.SendedMergeSignal)
+        {
+            SendedMergeSignal = true;
+            fruitObj.SendedMergeSignal = true;
+            GameManager.Instance.Merge(this, fruitObj);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Bariyer objesiyle çarpýþýyorsa iþlem yapma
-        if (other.gameObject.layer == LayerMask.NameToLayer("Barrier")) return;
-
         if (other.CompareTag("GameOverLine"))
         {
             GameManager.Instance.TriggerGameOver();
-        }
-        else
-        {
-            var fruitObj = other.GetComponent<FruitObject>();
-            if (!fruitObj) { return; }
-            if (fruitObj.type != type) { return; }
-            if (fruitObj.SendedMergeSignal) { return; }
-            SendedMergeSignal = true;
-            GameManager.Instance.Merge(this, fruitObj);
         }
     }
 }

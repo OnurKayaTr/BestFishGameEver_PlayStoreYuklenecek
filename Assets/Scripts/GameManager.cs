@@ -10,18 +10,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameArea gameArea;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private Transform gameOverLine; // Çizgi objesi
+    [SerializeField] private Transform gameOverLine;
     [SerializeField] private float gameOverDelay = 1f;
-    [SerializeField] private GameObject[] barrierPrefabs; // Bariyer prefablari
-     
-
-    // Dinamit prefabýný bariyer prefablarýna ekleyin
+    [SerializeField] private GameObject[] barrierPrefabs;
     [SerializeField] private GameObject dynamitePrefab;
 
     private List<FruitObject> activeFruits = new List<FruitObject>();
     private bool isGameOver;
-    private bool IsClick => Input.GetMouseButtonDown(0);
-    private readonly Vector2Int fruitRange = new Vector2Int(0, 4);
 
     private void Awake()
     {
@@ -30,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (IsClick && !isGameOver)
+        if (Input.GetMouseButtonDown(0) && !isGameOver)
         {
             OnClick();
         }
@@ -40,10 +35,9 @@ public class GameManager : MonoBehaviour
 
     private void OnClick()
     {
-        // Rastgele bir seçim yaparak ya meyve ya da bariyer spawn edeceðiz
-        if (Random.value < 0.7f) // Burada meyve spawn olma olasýlýðý %50
+        if (Random.value < 0.9f) // Meyve spawn olma olasýlýðý %50
         {
-            var index = Random.Range(fruitRange.x, fruitRange.y);
+            var index = Random.Range(0, Mathf.Min(3, settings.PrefabCount)); // Ýlk 3 türden spawn yap
             var spawnPosition = new Vector2(GetInputHorizontalPosition(), spawnPoint.position.y);
             SpawnFruit(index, spawnPosition);
         }
@@ -54,7 +48,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private float GetInputHorizontalPosition()
     {
         var inputPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
@@ -62,30 +55,35 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp(inputPosition, limit.x, limit.y);
     }
 
-    private void SpawnFruit(int index, Vector2 position)
+    private FruitObject SpawnFruit(int index, Vector2 position)
     {
-        var prefab = settings.SpawnObject;
-        var fruitObj = Instantiate(prefab, position, Quaternion.identity);
-        var sprite = settings.GetSprite(index);
-        var scale = settings.GetScale(index);
-
-        fruitObj.Prepare(sprite, index, scale);
-        activeFruits.Add(fruitObj);
+        var prefab = settings.GetFruitPrefab(index);
+        if (prefab != null)
+        {
+            var fruitObj = Instantiate(prefab, position, Quaternion.identity).GetComponent<FruitObject>();
+            fruitObj.type = index;
+            activeFruits.Add(fruitObj);
+            return fruitObj;
+        }
+        else
+        {
+            Debug.LogError("Prefab is null for index: " + index);
+            return null;
+        }
     }
 
-   
     private void SpawnBarrier(Vector2 position)
     {
         int randomIndex = Random.Range(0, barrierPrefabs.Length);
         var barrierPrefab = barrierPrefabs[randomIndex];
 
-        if (barrierPrefab == dynamitePrefab)
+        if (barrierPrefab != null)
         {
             Instantiate(barrierPrefab, position, Quaternion.identity);
         }
         else
         {
-            Instantiate(barrierPrefab, position, Quaternion.identity);
+            Debug.LogError("Barrier prefab is null.");
         }
     }
 
@@ -128,9 +126,28 @@ public class GameManager : MonoBehaviour
     {
         var type = first.type + 1;
         var spawnPosition = (first.transform.position + second.transform.position) / 2f;
+
+        if (type >= settings.PrefabCount) // Eðer tür mevcut deðilse, oyunu bitir
+        {
+            TriggerGameOver();
+            return;
+        }
+
         Destroy(first.gameObject);
         Destroy(second.gameObject);
-        SpawnFruit(type, spawnPosition);
+
+        var newFruit = SpawnFruit(type, spawnPosition);
+
+        if (newFruit != null)
+        {
+            StartCoroutine(ResetMergeFlag(newFruit));
+        }
+    }
+
+    private IEnumerator ResetMergeFlag(FruitObject fruit)
+    {
+        yield return new WaitForSeconds(0.1f);
+        fruit.SendedMergeSignal = false;
     }
 
     public void TriggerGameOver()

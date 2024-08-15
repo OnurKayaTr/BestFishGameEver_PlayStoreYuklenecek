@@ -224,11 +224,11 @@ MonoBehaviour:
   gameArea: {fileID: 260953477}
   spawnPoint: {fileID: 1745861151}
   gameOverPanel: {fileID: 925481336}
-  gameOverLine: {fileID: 1550960690}
-  gameOverDelay: 3
+  gameOverLine: {fileID: 1099798396}
+  gameOverDelay: 1
   barrierPrefabs:
-  - {fileID: 4214733634048696406, guid: 3aff6333e1ad1bf4eb40d2e48a8f1d85, type: 3}
   - {fileID: 1340090058498080, guid: b9f61412fbd551745bf2ced48e859fed, type: 3}
+  - {fileID: 4214733634048696406, guid: 3aff6333e1ad1bf4eb40d2e48a8f1d85, type: 3}
   - {fileID: 6341089026933767572, guid: 76dca15fe7586254baf10051b893f646, type: 3}
   dynamitePrefab: {fileID: 6341089026933767572, guid: 76dca15fe7586254baf10051b893f646, type: 3}
 --- !u!4 &75251378

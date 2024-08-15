@@ -1,42 +1,20 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Create FruitObjectSettings", fileName = "FruitObjectSettings", order = 0)]
+[CreateAssetMenu(fileName = "FruitObjectSettings", menuName = "Settings/FruitObjectSettings")]
 public class FruitObjectSettings : ScriptableObject
 {
-    [SerializeField] private List<Sprite> sprites;
-    [SerializeField] private List<float> scales;
-    [SerializeField] private FruitObject prefab;
+    public GameObject[] fruitPrefabs;
 
-    public FruitObject SpawnObject => prefab;
-
-    public Sprite GetSprite(int index)
+    public GameObject GetFruitPrefab(int index)
     {
-        if (index < 0 || index >= sprites.Count)
+        if (index >= 0 && index < fruitPrefabs.Length)
         {
-            Debug.LogError("Index is out of range.");
-            return null;
+            return fruitPrefabs[index];
         }
-        return sprites[index];
+
+        Debug.LogError("Index is out of range.");
+        return null;
     }
 
-    public float GetScale(int index)
-    {
-        if (index < 0 || index >= scales.Count)
-        {
-            Debug.LogError("Index is out of range.");
-            return 1f;
-        }
-        return scales[index];
-    }
-
-    [ContextMenu(nameof(SetScaleData))]
-    public void SetScaleData()
-    {
-        scales.Clear();
-        for (int i = 0; i < sprites.Count; i++)
-        {
-            scales.Add((i + 1) * .25f);
-        }
-    }
+    public int PrefabCount => fruitPrefabs.Length;
 }
