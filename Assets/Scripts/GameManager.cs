@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,13 +16,37 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float gameOverDelay = 1f;
     [SerializeField] private GameObject[] barrierPrefabs;
     [SerializeField] private GameObject dynamitePrefab;
+    [SerializeField] private Image fillImage;
+    [SerializeField] private Image yellowImage;
+    [SerializeField] private Button retryButton;
+    [SerializeField] private Button exitButton;
 
     private List<FruitObject> activeFruits = new List<FruitObject>();
     private bool isGameOver;
+    private int clickCount;
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        Application.targetFrameRate = 60;
+        if (yellowImage != null)
+        {
+            yellowImage.gameObject.SetActive(false);
+        }
+
+        if (retryButton != null)
+        {
+            retryButton.onClick.AddListener(RetryGame);
+        }
+
+        if (exitButton != null)
+        {
+            exitButton.onClick.AddListener(ExitGame);
+        }
     }
 
     private void Update()
@@ -35,16 +61,57 @@ public class GameManager : MonoBehaviour
 
     private void OnClick()
     {
-        if (Random.value < 0.9f) // Meyve spawn olma olasýlýðý %50
+        clickCount++;
+        UpdateFillAmount();
+
+        if (clickCount % 15 == 0)
         {
-            var index = Random.Range(0, Mathf.Min(3, settings.PrefabCount)); // Ýlk 3 türden spawn yap
             var spawnPosition = new Vector2(GetInputHorizontalPosition(), spawnPoint.position.y);
-            SpawnFruit(index, spawnPosition);
+            SpawnDynamite(spawnPosition);
+            ResetFillAmount();
+
+            if (yellowImage != null)
+            {
+                yellowImage.gameObject.SetActive(false);
+            }
         }
         else
         {
-            var spawnPosition = new Vector2(GetInputHorizontalPosition(), spawnPoint.position.y);
-            SpawnBarrier(spawnPosition);
+            if (Random.value < 0.9f)
+            {
+                var index = Random.Range(0, Mathf.Min(3, settings.PrefabCount));
+                var spawnPosition = new Vector2(GetInputHorizontalPosition(), spawnPoint.position.y);
+                SpawnFruit(index, spawnPosition);
+            }
+            else
+            {
+                var spawnPosition = new Vector2(GetInputHorizontalPosition(), spawnPoint.position.y);
+                SpawnBarrier(spawnPosition);
+            }
+        }
+
+        if (clickCount % 15 == 14)
+        {
+            if (yellowImage != null)
+            {
+                yellowImage.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void UpdateFillAmount()
+    {
+        if (fillImage != null)
+        {
+            fillImage.fillAmount = Mathf.Clamp01((float)(clickCount % 15) / 14f);
+        }
+    }
+
+    private void ResetFillAmount()
+    {
+        if (fillImage != null)
+        {
+            fillImage.fillAmount = 0f;
         }
     }
 
@@ -84,6 +151,18 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("Barrier prefab is null.");
+        }
+    }
+
+    private void SpawnDynamite(Vector2 position)
+    {
+        if (dynamitePrefab != null)
+        {
+            Instantiate(dynamitePrefab, position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("Dynamite prefab is null.");
         }
     }
 
@@ -127,7 +206,7 @@ public class GameManager : MonoBehaviour
         var type = first.type + 1;
         var spawnPosition = (first.transform.position + second.transform.position) / 2f;
 
-        if (type >= settings.PrefabCount) // Eðer tür mevcut deðilse, oyunu bitir
+        if (type >= settings.PrefabCount)
         {
             TriggerGameOver();
             return;
@@ -173,5 +252,22 @@ public class GameManager : MonoBehaviour
         {
             TriggerGameOver();
         }
+    }
+
+    // Retry buton iþlevi
+    private void RetryGame()
+    {
+        isGameOver = false;
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    // Exit buton iþlevi
+    private void ExitGame()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }

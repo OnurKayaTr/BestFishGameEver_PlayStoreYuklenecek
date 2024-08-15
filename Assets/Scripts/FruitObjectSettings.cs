@@ -15,6 +15,6 @@ public class FruitObjectSettings : ScriptableObject
         Debug.LogError("Index is out of range.");
         return null;
     }
-
+    
     public int PrefabCount => fruitPrefabs.Length;
 }

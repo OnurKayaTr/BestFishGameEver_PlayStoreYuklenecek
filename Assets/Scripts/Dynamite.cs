@@ -15,7 +15,7 @@ public class Dynamite : MonoBehaviour
     {
         yield return new WaitForSeconds(destroyDelay);
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f, destroyableLayer);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.6f, destroyableLayer);
         foreach (Collider2D collider in colliders)
         {
             if (!collider.CompareTag("Barrier"))
