@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866ea9a0af8283348a6442fb0828a912, type: 3}
+  m_Name: CableRendererPrefabsManager
+  m_EditorClassIdentifier: 
+  prefab_cable: {fileID: 11449782, guid: 24c4f75140285de47a21f52f0d16bb55, type: 3}
+  prefab_elasticString: {fileID: -7828759732132377897, guid: fea6b2abb7afa4f40b1bda6eaabc2bc8,
+    type: 3}
+  prefab_tentacle: {fileID: -1233537978603154932, guid: 389a57765e50a204ebb10a5634dbaba8,
+    type: 3}
+  prefab_ropeRenderer: {fileID: -3595450126071849968, guid: 84f8e259cd3a0af4db535df7bbbbfad6,
+    type: 3}
+  prefab_cable_canvas: {fileID: 11449782, guid: d1f2e3013f74991419df734e60b07f88,
+    type: 3}
+  prefab_elasticString_canvas: {fileID: -7828759732132377897, guid: 83f711d0b73a5414ab2d8350eb390d62,
+    type: 3}
+  prefab_tentacle_canvas: {fileID: -1233537978603154932, guid: d84ce3682a244084886bb7a6b4690ea1,
+    type: 3}
+  prefab_ropeRenderer_canvas: {fileID: -3595450126071849968, guid: c1748163e832d2b4098a3a7ad003f776,
+    type: 3}

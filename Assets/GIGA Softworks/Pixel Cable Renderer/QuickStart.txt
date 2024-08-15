@@ -1,0 +1,76 @@
+******************************************************************************************************************
+Soft Pixel Cables LITE - QUICK START GUIDE
+----------------------------------------------------------------------------
+
+Full documentation can be fount at: https://www.gigasoftworks.com/products/cablerenderer/docs/overview.html
+
+******************************************************************************************************************
+
++--------------------------------------------------------------
+TABLE OF CONTENTS
+
+1. Overview
+2. Editor Settings
+3. Creating Commands
+4. Further Help & contacts
++--------------------------------------------------------------
+
+1. Overview
+
+Soft Pixel Cables is a set of renderers and shaders to add 2D animated pixel cables to your Unity3D games.
+
+Included Renderers:
+
+ - Cable Renderer.
+
+Full Package Renderers (Not included in LITE package):
+
+ - Elastic String Renderer.
+ - Tentacle Renderer.
+ - Rope Renderer.
+  
+Features (LITE Package):
+
+ - 1 fully customizable animated renderer.
+ - Easy editing with dedicated editor gizmos and editor-time animations.
+ - Different coloring modes.
+ - Support for both SpriteRenderer and CanvasRenderer.
+ 
+----------------------------------------------------------------------------------------------------------------
+
+2. Editor Settings
+
+You can access the Editor Settings dialog from the top menu: GameObject->2D Object->Cable Renderer->Settings
+
+In this dialog you can customize the aspect and the behaviour of the cable editing tools, such as handles size and grid snapping.
+
+- HANDLES SETTINGS
+
+Use this settings to modify the size and the shape of the gizmos handles that you can use to move and resize the cables inside the Unity Editor.
+
+- SNAP SETTINGS 
+
+Use this settings to change the snapping behaviour of the handles on the scene view grid.
+NOTE: to enable snapping hold down Ctrl while dragging the handles.
+
+----------------------------------------------------------------------------------------------------------------
+
+3. Creating Cables
+
+There are several ways you can add a new cable inside the scene:
+
+1) Locate the project folder where the prefabs are stored (default is <b>Assets/GIGA Softworks/Pixel Cable Renderer/Prefabs</b>) and simply drag and drop
+   one of the provided prefabs inside the scene. (If you are working with Canvas UI use the appropriate prefab with the "_canvas" suffix in its name)
+2) Right click in the scene hierarchy and select: 2D Objects->Cable Renderer->[SpriteRenderer/CanvasRenderer]->[Cable Type].
+3) Use the Unity Editor menu and select: GameObject->2D Objects->Cable Renderer->[SpriteRenderer/CanvasRenderer]->[Cable Type].
+
+----------------------------------------------------------------------------------------------------------------
+
+4. Further Help & contacts
+
+You can view the full documentation at https://www.gigasoftworks.com/products/cablerenderer/docs/overview.html
+
+For any question or additional support you can contact GIGA Softworks at contact@gigasoftworks.com
+
+
+
