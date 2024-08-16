@@ -17,4 +17,5 @@ public class FruitObjectSettings : ScriptableObject
     }
     
     public int PrefabCount => fruitPrefabs.Length;
+    //ok
 }
