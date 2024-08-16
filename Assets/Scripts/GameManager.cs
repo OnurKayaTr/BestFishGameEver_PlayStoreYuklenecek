@@ -159,6 +159,7 @@ public class GameManager : MonoBehaviour
         if (dynamitePrefab != null)
         {
             Instantiate(dynamitePrefab, position, Quaternion.identity);
+            SoundManager.Instance.PlayDynamiteSound(); // Dinamit sesi çal
         }
         else
         {
@@ -219,42 +220,28 @@ public class GameManager : MonoBehaviour
 
         if (newFruit != null)
         {
-            StartCoroutine(ResetMergeFlag(newFruit));
+            newFruit.transform.position = spawnPosition;
+            SoundManager.Instance.PlayMergeSound();
         }
-    }
-
-    private IEnumerator ResetMergeFlag(FruitObject fruit)
-    {
-        yield return new WaitForSeconds(0.1f);
-        fruit.SendedMergeSignal = false;
     }
 
     public void TriggerGameOver()
     {
-        if (!isGameOver)
-        {
-            StartCoroutine(GameOverSequence());
-        }
-    }
+        if (isGameOver) return;
 
-    private IEnumerator GameOverSequence()
-    {
         isGameOver = true;
-        gameOverPanel.SetActive(true);
-        yield return new WaitForSeconds(gameOverDelay);
         Time.timeScale = 0;
-        Debug.Log("Game Over Triggered");
-    }
-
-    public void CheckGameOver(FruitObject fruit)
-    {
-        if (fruit.transform.position.y >= gameOverLine.position.y)
+        if (gameOverPanel != null)
         {
-            TriggerGameOver();
+            gameOverPanel.SetActive(true);
+        }
+
+        if (gameOverLine != null)
+        {
+            gameOverLine.gameObject.SetActive(true);
         }
     }
 
-    // Retry buton iþlevi
     private void RetryGame()
     {
         isGameOver = false;
@@ -262,7 +249,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    // Exit buton iþlevi
     private void ExitGame()
     {
         Application.Quit();

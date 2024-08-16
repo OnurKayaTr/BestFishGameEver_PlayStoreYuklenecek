@@ -8,6 +8,7 @@ public class Dynamite : MonoBehaviour
 
     private void Start()
     {
+        // Dinamitin patlama zamaný geldiðinde `ExplodeAfterDelay` coroutine'ini baþlatýr
         StartCoroutine(ExplodeAfterDelay());
     }
 
@@ -15,6 +16,7 @@ public class Dynamite : MonoBehaviour
     {
         yield return new WaitForSeconds(destroyDelay);
 
+        // Çarpýþma alanýnda dinamitin etkilediði nesneleri yok et
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.6f, destroyableLayer);
         foreach (Collider2D collider in colliders)
         {
@@ -24,6 +26,7 @@ public class Dynamite : MonoBehaviour
             }
         }
 
+        // Dinamit nesnesini yok et
         Destroy(gameObject);
     }
 }

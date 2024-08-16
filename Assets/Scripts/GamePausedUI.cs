@@ -6,7 +6,9 @@ public class GamePausedUI : MonoBehaviour
 {
     [SerializeField] private Button retryButton;
     [SerializeField] private Button exitButton;
-    [SerializeField] private Button pauseButton;  // Yeni Pause butonu
+    [SerializeField] private Button pauseButton;  // Pause butonu
+    [SerializeField] private Button toggleMusicButton;  // Arka plan müziði açma/kapama butonu
+    [SerializeField] private Button toggleEffectsButton;  // Ses efektlerini açma/kapama butonu
     [SerializeField] private GameObject pausePanel;
 
     private bool isPaused;
@@ -32,6 +34,16 @@ public class GamePausedUI : MonoBehaviour
         {
             pauseButton.onClick.AddListener(TogglePause);
         }
+
+        if (toggleMusicButton != null)
+        {
+            toggleMusicButton.onClick.AddListener(ToggleBackgroundMusic);
+        }
+
+        if (toggleEffectsButton != null)
+        {
+            toggleEffectsButton.onClick.AddListener(ToggleSoundEffects);
+        }
     }
 
     private void Update()
@@ -56,6 +68,16 @@ public class GamePausedUI : MonoBehaviour
             Time.timeScale = 1;
             pausePanel.SetActive(false);
         }
+    }
+
+    private void ToggleBackgroundMusic()
+    {
+        SoundManager.Instance.ToggleBackgroundMusic();
+    }
+
+    private void ToggleSoundEffects()
+    {
+        SoundManager.Instance.ToggleSoundEffects();
     }
 
     private void RetryGame()
