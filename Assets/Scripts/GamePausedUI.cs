@@ -12,6 +12,7 @@ public class GamePausedUI : MonoBehaviour
     [SerializeField] private GameObject pausePanel;
 
     private bool isPaused;
+    public AddManager reklam;
 
     private void Start()
     {
@@ -61,13 +62,44 @@ public class GamePausedUI : MonoBehaviour
         if (isPaused)
         {
             Time.timeScale = 0;
-            pausePanel.SetActive(true);
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(true);
+            }
         }
         else
         {
             Time.timeScale = 1;
-            pausePanel.SetActive(false);
+            if (pausePanel != null)
+            {
+                pausePanel.SetActive(false);
+            }
         }
+
+        // GameManager'daki duraklatma deðiþkenini güncelle
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.isGamePaused = isPaused;
+        }
+    }
+
+    private void RetryGame()
+    {
+
+        reklam.LoadInterstitialAd();
+
+        Time.timeScale = 1;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+    }
+
+    private void ExitGame()
+    {
+        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 
     private void ToggleBackgroundMusic()
@@ -78,20 +110,5 @@ public class GamePausedUI : MonoBehaviour
     private void ToggleSoundEffects()
     {
         SoundManager.Instance.ToggleSoundEffects();
-    }
-
-    private void RetryGame()
-    {
-        isPaused = false;
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private void ExitGame()
-    {
-        Application.Quit();
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
     }
 }

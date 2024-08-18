@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;  // TextMeshPro için gerekli
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameArea gameArea;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private GameObject youWinText;  // You Win yazýsý
     [SerializeField] private Transform gameOverLine;
     [SerializeField] private float gameOverDelay = 1f;
     [SerializeField] private GameObject[] barrierPrefabs;
@@ -20,18 +22,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image yellowImage;
     [SerializeField] private Button retryButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     private List<FruitObject> activeFruits = new List<FruitObject>();
     private bool isGameOver;
+    public bool isGamePaused; // Oyun duraklatýldýðýnda true olacak
     private int clickCount;
-
+    private int currentScore = 0;
+    public AddManager reklam;
     private void Awake()
     {
         Instance = this;
+        
     }
 
     private void Start()
     {
+        reklam.ShowInterstitialAd();
+
+
         Application.targetFrameRate = 60;
         if (yellowImage != null)
         {
@@ -47,16 +56,28 @@ public class GameManager : MonoBehaviour
         {
             exitButton.onClick.AddListener(ExitGame);
         }
+
+        if (youWinText != null)
+        {
+            youWinText.SetActive(false);  // Baþlangýçta kapalý tut
+        }
+
+        // Puanýn baþlangýç deðerini 0 olarak ayarla
+        UpdateScoreText();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isGameOver)
+        
+        if (Input.GetMouseButtonDown(0) && !isGameOver && !isGamePaused)
         {
             OnClick();
         }
 
-        MoveFruitsTowardsClosest();
+        if (!isGameOver && !isGamePaused)
+        {
+            MoveFruitsTowardsClosest();
+        }
     }
 
     private void OnClick()
@@ -207,9 +228,13 @@ public class GameManager : MonoBehaviour
         var type = first.type + 1;
         var spawnPosition = (first.transform.position + second.transform.position) / 2f;
 
+        // Puan hesaplama
+        int fruitScore = (int)(Mathf.Pow(2, type) * 10); // float'dan int'e dönüþüm
+        UpdateScore(fruitScore);
+
         if (type >= settings.PrefabCount)
         {
-            TriggerGameOver();
+            TriggerGameOver(true);  // Kazanma durumunu tetikle
             return;
         }
 
@@ -225,15 +250,40 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void TriggerGameOver()
+    private void UpdateScore(int scoreToAdd)
+    {
+        currentScore += scoreToAdd;
+        UpdateScoreText();
+    }
+
+    private void UpdateScoreText()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + currentScore;
+        }
+    }
+
+    public void TriggerGameOver(bool isWin = false)
     {
         if (isGameOver) return;
 
         isGameOver = true;
         Time.timeScale = 0;
+
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
+        }
+
+        if (isWin && youWinText != null)  // Kazanma durumunda "You Win" göster
+        {
+            youWinText.SetActive(true);
+            SoundManager.Instance.PlayYouWinSound();  // You Win sesini çal
+        }
+        else
+        {
+            SoundManager.Instance.PlayGameOverSound();  // Game Over sesini çal
         }
 
         if (gameOverLine != null)
@@ -244,6 +294,7 @@ public class GameManager : MonoBehaviour
 
     private void RetryGame()
     {
+        reklam.LoadInterstitialAd();
         isGameOver = false;
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -10,6 +10,8 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip mergeSound;
     [SerializeField] private AudioSource soundEffectSource;
     [SerializeField] private AudioClip dynamiteSound; // Dinamit patlama sesi
+    [SerializeField] private AudioClip youWinSound;   // You Win sesi
+    [SerializeField] private AudioClip gameOverSound; // Game Over sesi
 
     private bool isMusicMuted;
     private bool areEffectsMuted;
@@ -49,6 +51,22 @@ public class SoundManager : MonoBehaviour
         if (!areEffectsMuted && soundEffectSource != null && dynamiteSound != null)
         {
             soundEffectSource.PlayOneShot(dynamiteSound);
+        }
+    }
+
+    public void PlayYouWinSound()
+    {
+        if (!areEffectsMuted && soundEffectSource != null && youWinSound != null)
+        {
+            soundEffectSource.PlayOneShot(youWinSound);
+        }
+    }
+
+    public void PlayGameOverSound()
+    {
+        if (!areEffectsMuted && soundEffectSource != null && gameOverSound != null)
+        {
+            soundEffectSource.PlayOneShot(gameOverSound);
         }
     }
 
